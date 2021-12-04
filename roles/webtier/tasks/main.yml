@@ -1,0 +1,39 @@
+- name: Replace database name
+  replace:
+    path: "{{ doc_root }}/rates/config.py"
+    regexp: '(?i)\"name\": \"postgres\"'
+    replace: '"name": "{{ name }}"'
+
+- name: Replace database username
+  replace:
+    path: "{{ doc_root }}/rates/config.py"
+    regexp: '(?i)\"user\": \"postgres\"'
+    replace: '"user": "{{ username }}"'
+
+- name: Replace database hostname
+  replace:
+    path: "{{ doc_root }}/rates/config.py"
+    regexp: '(?i)\"host\": \"localhost\"'
+    replace: '"host": "{{ hostname }}"'
+
+- name: Copy docker file
+  template:
+    src: Dockerfile
+    dest: "{{ doc_root }}/rates/Dockerfile"
+
+- name: Build docker image
+  docker_image:
+    name: ratesapi
+    build:
+      path: "{{ doc_root }}/rates/"
+    source: build
+
+- name: Run web api container
+  docker_container:
+    name: dev-ratesapi
+    recreate: yes
+    image: ratesapi
+    ports:
+    - "3000:3000"
+    networks:
+    - name: "{{ docker_network }}"

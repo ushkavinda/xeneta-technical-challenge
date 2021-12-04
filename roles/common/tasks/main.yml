@@ -1,0 +1,21 @@
+- name: Create document root
+  file: 
+    path: "{{ doc_root }}"
+    state: directory
+    mode: 0775
+    recurse: yes
+
+- name: Clone code from git repository
+  git:
+    repo: https://github.com/xeneta/operations-task.git
+    dest: "{{ doc_root }}"
+    clone: yes
+    update: yes
+    force: yes
+
+- name: Create a network
+  docker_network:
+    name: "{{ docker_network }}"
+
+
+

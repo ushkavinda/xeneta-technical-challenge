@@ -1,0 +1,6 @@
+docker_network: "dev-network"
+docker_network_alias: "dev-sql"
+doc_root: "/usr/local/app"
+name: "postgres"
+username: "postgres"
+hostname: "{{ docker_network_alias }}"

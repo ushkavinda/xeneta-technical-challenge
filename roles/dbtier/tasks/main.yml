@@ -1,0 +1,18 @@
+- name: Create postgres DB container
+  docker_container:
+    name: dev-db
+    #recreate: yes
+    image: postgres:13.5
+    ports:
+    - "5432:5432"
+    networks:
+    - name: "{{ docker_network }}"
+      aliases:
+        - "{{ docker_network_alias }}"
+    env:
+       POSTGRES_HOST_AUTH_METHOD: trust
+
+
+- name: Restore DB backup
+  shell: "psql -h localhost -U postgres < {{ doc_root }}/db/rates.sql"
+  #command: psql -h localhost -U postgres -c "SELECT 'alive'"
