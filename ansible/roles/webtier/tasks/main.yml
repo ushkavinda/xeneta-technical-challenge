@@ -27,12 +27,13 @@
     build:
       path: "{{ doc_root }}/rates/"
     source: build
+    force_source: yes
 
 - name: Run web api container
   docker_container:
     name: dev-ratesapi
     recreate: yes
-    image: ratesapi
+    image: ratesapi:latest
     ports:
     - "3000:3000"
     networks:

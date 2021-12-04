@@ -1,7 +1,7 @@
 - name: Create postgres DB container
   docker_container:
     name: dev-db
-    #recreate: yes
+    recreate: yes
     image: postgres:13.5
     ports:
     - "5432:5432"
