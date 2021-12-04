@@ -1,6 +1,5 @@
-docker_network: "dev-network"
-docker_network_alias: "dev-sql"
-doc_root: "/usr/local/app"
+docker_network_alias: "devsql"
+doc_root: "/tmp/app"
 name: "postgres"
 username: "postgres"
 hostname: "{{ docker_network_alias }}"

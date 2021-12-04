@@ -36,4 +36,4 @@
     ports:
     - "3000:3000"
     networks:
-    - name: "{{ docker_network }}"
+    - name: "rates-app-network"
