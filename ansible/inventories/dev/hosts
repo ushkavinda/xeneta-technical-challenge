@@ -1,4 +1,4 @@
 localhost ansible_connection=local
 
-[DEV_AWS]
+[DEV_REMOTE]
 18.216.159.193 ansible_user=ec2-user
