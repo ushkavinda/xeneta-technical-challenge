@@ -1,21 +1,21 @@
 ## Xeneta Technical Challenge
 
-This documentation demonstrates how to configure and deploy the given application in the development environment.
+This documentation demonstrates how to configure and deploy the given application in a development environment.
 
 ## Install prerequisites
 
- 1. **Control node** - The machine runs Ansible commands and playbooks. You can use any Linux OS as your control node. If you are using Windows, it is required to configure and install [WSL](https://docs.microsoft.com/en-us/windows/wsl/install). 
+ 1. **Control node** - The machine runs Ansible commands and playbooks. You can use any Linux based machine as your Control node. If you are using Windows, it is required to configure and install [WSL](https://docs.microsoft.com/en-us/windows/wsl/install). 
  
 	 - Install ansible ([Official documentation](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html))
 	 
- 2. **Manage node** - The machine that runs the application workload as docker containers. You can use the same control node as you manage node to deploy the application locally as well as you can use a remote server. If you are running the workload in a remote server you may be required to verify the connectivity between nodes. Ex: SSH access from the control node to the Manage node. 
+ 2. **Manage node** - The machine that runs the application workload as docker containers. You can use the same Control node as you Manage node to deploy the application locally as well as you can use a remote server. If you are running the workload in a remote server it is required to verify the SSH connectivity between two nodes (Control node should have the SSH access to the Manage node). 
 	 
-	 - Install Docker ([Instructions](https://docs.docker.com/engine/install/centos/)) and add 
-	 - User permission to run docker commands ([Instruction](https://docs.docker.com/engine/install/linux-postinstall/))
+	 - Install Docker ([Instructions](https://docs.docker.com/engine/install/centos/)) 
+	 - Add user permission to run docker commands ([Instruction](https://docs.docker.com/engine/install/linux-postinstall/))
 	 - Install Postgres client ([Instructions](https://www.postgresql.org/download/linux/redhat/)) 
 	 - Install Python client for docker ([Instructions](https://pypi.org/project/docker-py/))
 
-To install the above-required tools, you can use the **control_node_setup.sh** and **host_setup.sh** scripts which are available in this repository. These two scripts are compatible only with **Ubuntu 18.04 LTS or a higher version**.
+To install the above mentioned tools, you can use the **control_node_setup.sh** and **host_setup.sh** scripts which are available in this repository. These two scripts are compatible only with **Ubuntu 18.04 LTS or a higher version**.
 
  - **control_node_setup.sh** - To install ansible.
  - **host_setup.sh** - To install docker and other modules. If you are planning to run the workload locally, execute this script in the same machine or else execute this in your remote machine. 
@@ -59,11 +59,11 @@ Tip: If you planning to launch an AWS EC2 instance to run the application, you c
 	```
 	cd xeneta-technical-challenge/ansible/
 	```
-2. Edit the remote server IP in the host file. You can use any editor to edit this file. The following command will open the file in vi editor.
+2. Edit the remote server IP in the **host file**. You can use any editor to edit this file. The following command will open the file in vi editor.
 	```
 	vi inventories/dev/hosts
 	```
-	In this file, you will see a section called [DEV_REMOTE]. Replace the IP address with your remote server IP and the ansible_user as per your environment.
+	In this file, you will see a section called **[DEV_REMOTE]**. Replace the IP address with your remote server IP and the **ansible_user** as per your environment.
 	```
 	localhost ansible_connection=local
   
@@ -72,7 +72,7 @@ Tip: If you planning to launch an AWS EC2 instance to run the application, you c
 	```
 	Once the changes are been made, save the file and exit.
 
-3. Run the ansible palybook command from the **control node** to deploy the application components as containers. 
+3. Run the ansible palybook command from the **Control node** to deploy the application components as containers. 
 	```
 	 ansible-playbook site.yml -i inventories/dev/hosts --limit DEV_REMOTE
 	```
@@ -91,7 +91,7 @@ Tip: If you planning to launch an AWS EC2 instance to run the application, you c
 	11dbe09abd15   postgres:13.5     "docker-entrypoint.s…"   4 minutes ago   Up 4 minutes   0.0.0.0:5432->5432/tcp   dev-db
 	
 	```
-4. To validate results, either you can run the curl command inside from the remote server or run curl command from the control node by replacing the IP as following. 
+4. To validate results, either you can run the curl command inside from the remote server or run curl command from the **Control node** by replacing the IP as following. 
 	```
 	Inside remote server: 
 	curl "http://127.0.0.1:3000/rates?date_from=2021-01-01&date_to=2021-01-31&orig_code=CNGGZ&dest_code=EETLL" 
@@ -106,30 +106,30 @@ Tip: If you planning to launch an AWS EC2 instance to run the application, you c
 ```
 xeneta-technical-challenge/
 ├─ ansible/
-│  ├─ inventories/						# This directory container ansible inventory details related to the development environment.
+│  ├─ inventories/		# Contains ansible inventory details related to the development environment.
 │  │  ├─ dev/							
-│  │  │  ├─ grou_vars/					# Variables realated to development environment.
+│  │  │  ├─ grou_vars/		# Variables realated to development environment.
 │  │  │  │  ├─ all.yml					
-│  │  │  ├─ hosts						# Ansible inventory fie which consists of server IPs for the development environment.
+│  │  │  ├─ hosts		# Ansible inventory fie which consists of server IPs for the development environment (Remote deployment).
 │  ├─ roles/
 │  │  ├─ common/
 │  │  │  ├─ tasks/
-│  │  │  │  ├─ main.yml					# Ansible task which executes commands to Create directory, Clone application code from git, and Create docker network.
+│  │  │  │  ├─ main.yml		# Ansible task which executes commands to Create directory, Clone application code from git, and Create docker network.
 │  │  ├─ dbtier/
 │  │  │  ├─ tasks/
-│  │  │  │  ├─ main.yml					# Ansible task which executes DB docker container and DB backup restore.
+│  │  │  │  ├─ main.yml		# Ansible task which executes DB docker container and DB backup restore.
 │  │  ├─ webtier/
 │  │  │  ├─ tasks/
-│  │  │  │  ├─ main.yml					# Ansible task which executes commands to replace the rates/config.py values dynamically, build API docker image, and run rates API container.
+│  │  │  │  ├─ main.yml		# Ansible task which executes commands to replace the rates/config.py values dynamically, build API docker image, and run rates API container.
 │  │  │  ├─ templates/
-│  │  │  │  ├─ Dockerfile				# Dockerfile with instructions to build the rates API image.
-│  ├─ site.yml							# Ansible master playbook which executes the roles.
-control_node_setup.sh					# Shell script to setup environment for Control node.
-host_setup.sh							# Shell script to setup environemnt for Manged node. 
+│  │  │  │  ├─ Dockerfile	# Dockerfile with instructions to build the rates API image.
+│  ├─ site.yml			# Ansible master playbook which executes the roles.
+control_node_setup.sh		# Shell script to setup environment for Control node.
+host_setup.sh			# Shell script to setup environemnt for Manged node. 
 README.md
 ```
 ### Dynamically pass configuration values
-In order to change the rates/config.py values based on the environment; you can use the inventories/dev/group_vars/all.yml file. This file consists of all the required variables which are related to the development environment.
+In order to change the ```rates/config.py``` values based on the environment, you can use the ```inventories/dev/group_vars/all.yml``` file. This file consists of all the required variables which are related to the development environment.
 ```
 docker_network_alias: "devsql"
 doc_root: "/tmp/app"
@@ -138,9 +138,9 @@ username: "postgres"
 hostname: "{{ docker_network_alias }}"
 ```
 
-Once you deploy the environment, it will create two separate docker containers for API service and DB service. To enable the communication between API and DB these containers are attached to the same network and the DB container has a network alias (---network alias). Therefore, the API service can use the same network alias name as the database hostname
+Once you deploy the environment, it will create two separate docker containers for API service and DB service. To enable the communication between API and DB these containers are attached to the same network and the DB container has a network alias (---network alias). Therefore, the API service can use the same network alias name as the database hostname.
 
-Replacement of rates/config.py is done by ansible regex replacement as shown below. The reason is to do it in such a way is because no need to do any changes in the application code. The automation will consume the API code as it is and values dynamically change before building the docker image.
+Replacement of ```rates/config.py`` is done by ansible regex replacement as shown below. The reason is to do it in such a way, is because not required to do any changes in the application code. The automation will consume the API code as it is and values are dynamically changing before building the docker image.
 ```
 ...
 - name: Replace database hostname
