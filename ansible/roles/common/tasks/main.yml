@@ -1,3 +1,4 @@
+# Create a tempory directory to clone the code repository.
 - name: Create document root
   file: 
     path: "{{ doc_root }}"
@@ -5,6 +6,7 @@
     mode: 0775
     recurse: yes
 
+# Clone the application code repository. This always get the lastest code and inogre the local changes.
 - name: Clone code from git repository
   git:
     repo: https://github.com/xeneta/operations-task.git

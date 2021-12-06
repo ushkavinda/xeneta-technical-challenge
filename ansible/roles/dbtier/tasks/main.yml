@@ -1,3 +1,5 @@
+# Run the postgres:13.5 docker container as the DB. 
+# This container will be attached to the dev network and use the network alais name from variable
 - name: Create postgres DB container
   docker_container:
     name: dev-db
@@ -12,12 +14,15 @@
     env:
        POSTGRES_HOST_AUTH_METHOD: trust
 
+# Wait 5 seconds until DB container up & running.
 - name: Wait until DB is ready
   pause:
     seconds: 5
 
+# Validate the database connectivity.
 - name: Validate DB
   shell: "psql -h localhost -U postgres -c \"SELECT 'alive'\""
 
+# Restore the DB back from the application directory
 - name: Restore DB backup
   shell: "psql -h localhost -U postgres < {{ doc_root }}/db/rates.sql"

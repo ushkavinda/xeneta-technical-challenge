@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#install docker
+# install docker
 sudo apt-get update
 sudo apt-get install \
     ca-certificates \
@@ -14,8 +14,8 @@ echo \
 sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io --yes
 
-# add ubuntu user to docker group
-sudo usermod -aG docker ubuntu
+# user permission
+sudo usermod -aG docker $USER
 
 # install required modules
 sudo apt install python-docker --yes
