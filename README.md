@@ -15,7 +15,7 @@ This documentation demonstrates how to configure and deploy the given applicatio
 	 - Install Postgres client ([Instructions](https://www.postgresql.org/download/linux/redhat/)) 
 	 - Install Python client for docker ([Instructions](https://pypi.org/project/docker-py/))
 
-To install the above mentioned tools, you can use the **control_node_setup.sh** and **host_setup.sh** scripts which are available in this repository. These two scripts are compatible only with **Ubuntu 18.04 LTS or a higher version**.
+To install the above mentioned tools, you can use the **control_node_setup.sh** and **host_setup.sh** scripts which are available in this repository. These two scripts are compatible only with **Ubuntu 18.04 LTS**.
 
  - **control_node_setup.sh** - To install ansible.
  - **host_setup.sh** - To install docker and other modules. If you are planning to run the workload locally, execute this script in the same machine or else execute this in your remote machine. 
